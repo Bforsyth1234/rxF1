@@ -1,0 +1,7 @@
+{
+  "name": "rxF1",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
