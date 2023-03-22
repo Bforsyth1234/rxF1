@@ -1,0 +1,98 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>F1 - Data</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      List of Races per season with final results.
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <ion-label>Season</ion-label>
+          <ion-select [(ngModel)]="selectedRacesSeason" (ionChange)="getRacesPerSeason()">
+            <ion-select-option *ngFor="let season of seasons" [value]="season">{{season}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item *ngFor="let race of racesPerSeason | async ">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <h1>
+                  {{race.raceName}} {{race.round}}
+                </h1>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <h1>
+                  Finished: {{getCarsFinished(race)}}
+                </h1>
+
+              </ion-col>
+              <ion-col>
+                <h1>
+                  Accident: {{getCarsThatCrashed(race)}}
+                </h1>
+
+              </ion-col>
+              <ion-col>
+                <h1>
+                  +1 Lap: {{getCarsThatPlusOned(race)}}
+                </h1>
+
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <h3>Driver Name</h3>
+              </ion-col>
+              <ion-col>
+                <h3>
+                  Result Position
+                </h3>
+              </ion-col>
+              <ion-col>
+                <h3>
+                  Qualifying Position
+                </h3>
+              </ion-col>
+              <ion-col>
+                <h3>
+                  Driver Standings
+                </h3>
+              </ion-col>
+            </ion-row>
+            <ion-row *ngFor="let result of race.results">
+              <ion-col>
+                <ion-label>{{result.Driver.givenName}} {{result.Driver.familyName}}</ion-label>
+              </ion-col>
+              <ion-col>
+                {{result.position}}
+              </ion-col>
+              <ion-col>
+                {{result?.qualifying?.[0]?.position}}
+              </ion-col>
+              <ion-col>
+                {{result?.standing?.[0]?.position}}
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  <ion-item>
+    <ion-label>Limit</ion-label>
+    <ion-select [(ngModel)]="selectedLimit" (ionChange)="changeSelectedLimit()">
+      <ion-select-option *ngFor="let limit of limits" [value]="limit">{{limit}}</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item>
+    <ion-button *ngIf="offset >= selectedLimit" (click)="getPrevious()">Previous {{selectedLimit}}</ion-button>
+    <ion-button (click)="getNext()">Next {{selectedLimit}}</ion-button>
+  </ion-item>
+</ion-content>
